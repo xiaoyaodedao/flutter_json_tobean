@@ -1,0 +1,297 @@
+///解析object类型
+class Decoder<T extends Decoder<Object>> {
+  T fromJson(Map<String, dynamic> json, T t) {}
+}
+///解析List类型
+class ListDecoder<T extends Decoder> {
+  List<T> fromJson(Map<String, dynamic> json, T t) {}
+}
+
+class BaseBean<T extends Decoder> implements Decoder<T> {
+  T data;
+  int errorCode;
+  String errorMsg;
+
+  @override
+  T fromJson(Map<String, dynamic> json, T t) {
+    errorCode = json['errorCode'];
+    errorMsg = json['errorMsg'];
+    if (errorCode == 0 && json['data'] != null) {
+      data = t.fromJson(json['data'], t);
+    }
+    return data;
+  }
+}
+
+class BaseListBean<T extends Decoder> implements ListDecoder<T> {
+  List<T> data;
+  int errorCode;
+  String errorMsg;
+
+  @override
+  List<T> fromJson(Map<String, dynamic> json, T t) {
+    errorCode = json['errorCode'];
+    errorMsg = json['errorMsg'];
+    data = new List();
+    if (errorCode == 0 && json['data'] != null) {
+      json['data'].forEach((v) {
+        data.add(t.fromJson(v, t));
+      });
+    }
+    return data;
+  }
+}
+
+class BannerData implements Decoder<BannerData> {
+  String desc;
+  int id;
+  String imagePath;
+  int isVisible;
+  int order;
+  String title;
+  int type;
+  String url;
+
+  BannerData(
+      {this.desc,
+      this.id,
+      this.imagePath,
+      this.isVisible,
+      this.order,
+      this.title,
+      this.type,
+      this.url});
+
+  BannerData fromJson(Map<String, dynamic> json, BannerData bannerData) {
+    var data2 = BannerData();
+    data2.desc = json['desc'];
+    data2.id = json['id'];
+    data2.imagePath = json['imagePath'];
+    data2.isVisible = json['isVisible'];
+    data2.order = json['order'];
+    data2.title = json['title'];
+    data2.type = json['type'];
+    data2.url = json['url'];
+    return data2;
+  }
+}
+
+class HomeData implements Decoder<HomeData>{
+  int curPage;
+  List<HomeItemDatas> datas;
+  int offset;
+  bool over;
+  int pageCount;
+  int size;
+  int total;
+
+  HomeData(
+      {this.curPage,
+      this.datas,
+      this.offset,
+      this.over,
+      this.pageCount,
+      this.size,
+      this.total});
+
+  HomeData fromJson(Map<String, dynamic> json,HomeData homeData) {
+    curPage = json['curPage'];
+    if (json['datas'] != null) {
+      datas = new List<HomeItemDatas>();
+      json['datas'].forEach((v) {
+        datas.add(new HomeItemDatas.fromJson(v));
+      });
+    }
+    offset = json['offset'];
+    over = json['over'];
+    pageCount = json['pageCount'];
+    size = json['size'];
+    total = json['total'];
+    return this;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['curPage'] = this.curPage;
+    if (this.datas != null) {
+      data['datas'] = this.datas.map((v) => v.toJson()).toList();
+    }
+    data['offset'] = this.offset;
+    data['over'] = this.over;
+    data['pageCount'] = this.pageCount;
+    data['size'] = this.size;
+    data['total'] = this.total;
+    return data;
+  }
+}
+
+class HomeItemDatas {
+  String apkLink;
+  int audit;
+  String author;
+  bool canEdit;
+  int chapterId;
+  String chapterName;
+  bool collect;
+  int courseId;
+  String desc;
+  String descMd;
+  String envelopePic;
+  bool fresh;
+  String host;
+  int id;
+  String link;
+  String niceDate;
+  String niceShareDate;
+  String origin;
+  String prefix;
+  String projectLink;
+  int publishTime;
+  int realSuperChapterId;
+  int selfVisible;
+  int shareDate;
+  String shareUser;
+  int superChapterId;
+  String superChapterName;
+  List<Tags> tags;
+  String title;
+  int type;
+  int userId;
+  int visible;
+  int zan;
+
+  HomeItemDatas(
+      {this.apkLink,
+      this.audit,
+      this.author,
+      this.canEdit,
+      this.chapterId,
+      this.chapterName,
+      this.collect,
+      this.courseId,
+      this.desc,
+      this.descMd,
+      this.envelopePic,
+      this.fresh,
+      this.host,
+      this.id,
+      this.link,
+      this.niceDate,
+      this.niceShareDate,
+      this.origin,
+      this.prefix,
+      this.projectLink,
+      this.publishTime,
+      this.realSuperChapterId,
+      this.selfVisible,
+      this.shareDate,
+      this.shareUser,
+      this.superChapterId,
+      this.superChapterName,
+      this.tags,
+      this.title,
+      this.type,
+      this.userId,
+      this.visible,
+      this.zan});
+
+  HomeItemDatas.fromJson(Map<String, dynamic> json) {
+    apkLink = json['apkLink'];
+    audit = json['audit'];
+    author = json['author'];
+    canEdit = json['canEdit'];
+    chapterId = json['chapterId'];
+    chapterName = json['chapterName'];
+    collect = json['collect'];
+    courseId = json['courseId'];
+    desc = json['desc'];
+    descMd = json['descMd'];
+    envelopePic = json['envelopePic'];
+    fresh = json['fresh'];
+    host = json['host'];
+    id = json['id'];
+    link = json['link'];
+    niceDate = json['niceDate'];
+    niceShareDate = json['niceShareDate'];
+    origin = json['origin'];
+    prefix = json['prefix'];
+    projectLink = json['projectLink'];
+    publishTime = json['publishTime'];
+    realSuperChapterId = json['realSuperChapterId'];
+    selfVisible = json['selfVisible'];
+    shareDate = json['shareDate'];
+    shareUser = json['shareUser'];
+    superChapterId = json['superChapterId'];
+    superChapterName = json['superChapterName'];
+    if (json['tags'] != null) {
+      tags = new List<Tags>();
+      json['tags'].forEach((v) {
+        tags.add(new Tags.fromJson(v));
+      });
+    }
+    title = json['title'];
+    type = json['type'];
+    userId = json['userId'];
+    visible = json['visible'];
+    zan = json['zan'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['apkLink'] = this.apkLink;
+    data['audit'] = this.audit;
+    data['author'] = this.author;
+    data['canEdit'] = this.canEdit;
+    data['chapterId'] = this.chapterId;
+    data['chapterName'] = this.chapterName;
+    data['collect'] = this.collect;
+    data['courseId'] = this.courseId;
+    data['desc'] = this.desc;
+    data['descMd'] = this.descMd;
+    data['envelopePic'] = this.envelopePic;
+    data['fresh'] = this.fresh;
+    data['host'] = this.host;
+    data['id'] = this.id;
+    data['link'] = this.link;
+    data['niceDate'] = this.niceDate;
+    data['niceShareDate'] = this.niceShareDate;
+    data['origin'] = this.origin;
+    data['prefix'] = this.prefix;
+    data['projectLink'] = this.projectLink;
+    data['publishTime'] = this.publishTime;
+    data['realSuperChapterId'] = this.realSuperChapterId;
+    data['selfVisible'] = this.selfVisible;
+    data['shareDate'] = this.shareDate;
+    data['shareUser'] = this.shareUser;
+    data['superChapterId'] = this.superChapterId;
+    data['superChapterName'] = this.superChapterName;
+    if (this.tags != null) {
+      data['tags'] = this.tags.map((v) => v.toJson()).toList();
+    }
+    data['title'] = this.title;
+    data['type'] = this.type;
+    data['userId'] = this.userId;
+    data['visible'] = this.visible;
+    data['zan'] = this.zan;
+    return data;
+  }
+}
+
+class Tags {
+  String name;
+  String url;
+
+  Tags({this.name, this.url});
+
+  Tags.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    url = json['url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['url'] = this.url;
+    return data;
+  }
+}
